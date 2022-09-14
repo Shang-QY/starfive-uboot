@@ -11,63 +11,64 @@
 	#size-cells = <2>;
 	compatible = "starfive,jh7100";
 
-	cpus {
-		#address-cells = <1>;
-		#size-cells = <0>;
-		cpu@0 {
-			compatible = "sifive,u74-mc", "riscv";
-			d-cache-block-size = <64>;
-			d-cache-sets = <64>;
-			d-cache-size = <32768>;
-			d-tlb-sets = <1>;
-			d-tlb-size = <32>;
-			device_type = "cpu";
-			i-cache-block-size = <64>;
-			i-cache-sets = <64>;
-			i-cache-size = <32768>;
-			i-tlb-sets = <1>;
-			i-tlb-size = <32>;
-			mmu-type = "riscv,sv39";
-			next-level-cache = <&ccache>;
-			reg = <0>;
-			riscv,isa = "rv64imafdc";
-			starfive,itim = <&itim0>;
-			status = "okay";
-			tlb-split;
-			cpu0_intc: interrupt-controller {
-				#interrupt-cells = <1>;
-				compatible = "riscv,cpu-intc";
-				interrupt-controller;
-			};
-		};
+	// CPU info now put in jh7100-beaglev-starlight.dts
+	// cpus {
+	// 	#address-cells = <1>;
+	// 	#size-cells = <0>;
+	// 	cpu@0 {
+	// 		compatible = "sifive,u74-mc", "riscv";
+	// 		d-cache-block-size = <64>;
+	// 		d-cache-sets = <64>;
+	// 		d-cache-size = <32768>;
+	// 		d-tlb-sets = <1>;
+	// 		d-tlb-size = <32>;
+	// 		device_type = "cpu";
+	// 		i-cache-block-size = <64>;
+	// 		i-cache-sets = <64>;
+	// 		i-cache-size = <32768>;
+	// 		i-tlb-sets = <1>;
+	// 		i-tlb-size = <32>;
+	// 		mmu-type = "riscv,sv39";
+	// 		next-level-cache = <&ccache>;
+	// 		reg = <0>;
+	// 		riscv,isa = "rv64imafdc";
+	// 		starfive,itim = <&itim0>;
+	// 		status = "okay";
+	// 		tlb-split;
+	// 		cpu0_intc: interrupt-controller {
+	// 			#interrupt-cells = <1>;
+	// 			compatible = "riscv,cpu-intc";
+	// 			interrupt-controller;
+	// 		};
+	// 	};
 
-		cpu@1 {
-			compatible = "sifive,u74-mc", "riscv";
-			d-cache-block-size = <64>;
-			d-cache-sets = <64>;
-			d-cache-size = <32768>;
-			d-tlb-sets = <1>;
-			d-tlb-size = <32>;
-			device_type = "cpu";
-			i-cache-block-size = <64>;
-			i-cache-sets = <64>;
-			i-cache-size = <32768>;
-			i-tlb-sets = <1>;
-			i-tlb-size = <32>;
-			mmu-type = "riscv,sv39";
-			next-level-cache = <&ccache>;
-			reg = <1>;
-			riscv,isa = "rv64imafdc";
-			starfive,itim = <&itim1>;
-			status = "okay";
-			tlb-split;
-			cpu1_intc: interrupt-controller {
-				#interrupt-cells = <1>;
-				compatible = "riscv,cpu-intc";
-				interrupt-controller;
-			};
-		};
-	};
+	// 	cpu@1 {
+	// 		compatible = "sifive,u74-mc", "riscv";
+	// 		d-cache-block-size = <64>;
+	// 		d-cache-sets = <64>;
+	// 		d-cache-size = <32768>;
+	// 		d-tlb-sets = <1>;
+	// 		d-tlb-size = <32>;
+	// 		device_type = "cpu";
+	// 		i-cache-block-size = <64>;
+	// 		i-cache-sets = <64>;
+	// 		i-cache-size = <32768>;
+	// 		i-tlb-sets = <1>;
+	// 		i-tlb-size = <32>;
+	// 		mmu-type = "riscv,sv39";
+	// 		next-level-cache = <&ccache>;
+	// 		reg = <1>;
+	// 		riscv,isa = "rv64imafdc";
+	// 		starfive,itim = <&itim1>;
+	// 		status = "okay";
+	// 		tlb-split;
+	// 		cpu1_intc: interrupt-controller {
+	// 			#interrupt-cells = <1>;
+	// 			compatible = "riscv,cpu-intc";
+	// 			interrupt-controller;
+	// 		};
+	// 	};
+	// };
 
 	osc_sys: osc_sys {
 		compatible = "fixed-clock";
