@@ -47,7 +47,7 @@
 
             udomain: untrusted-domain {
                 compatible = "opensbi,domain,instance";
-                possible-harts = <&cpu0 &cpu1>;
+                possible-harts = <&cpu0>;
                 regions = <&allmem 0x7>;
                 boot-hart = <&cpu0>;
             };
@@ -98,33 +98,33 @@
 			};
 		};
 
-		cpu1: cpu@1 {
-			compatible = "sifive,u74-mc", "riscv";
-            opensbi-domain = <&udomain>;
-			d-cache-block-size = <64>;
-			d-cache-sets = <64>;
-			d-cache-size = <32768>;
-			d-tlb-sets = <1>;
-			d-tlb-size = <32>;
-			device_type = "cpu";
-			i-cache-block-size = <64>;
-			i-cache-sets = <64>;
-			i-cache-size = <32768>;
-			i-tlb-sets = <1>;
-			i-tlb-size = <32>;
-			mmu-type = "riscv,sv39";
-			next-level-cache = <&ccache>;
-			reg = <1>;
-			riscv,isa = "rv64imafdc";
-			starfive,itim = <&itim1>;
-			status = "okay";
-			tlb-split;
-			cpu1_intc: interrupt-controller {
-				#interrupt-cells = <1>;
-				compatible = "riscv,cpu-intc";
-				interrupt-controller;
-			};
-		};
+		// cpu1: cpu@1 {
+		// 	compatible = "sifive,u74-mc", "riscv";
+        //     opensbi-domain = <&udomain>;
+		// 	d-cache-block-size = <64>;
+		// 	d-cache-sets = <64>;
+		// 	d-cache-size = <32768>;
+		// 	d-tlb-sets = <1>;
+		// 	d-tlb-size = <32>;
+		// 	device_type = "cpu";
+		// 	i-cache-block-size = <64>;
+		// 	i-cache-sets = <64>;
+		// 	i-cache-size = <32768>;
+		// 	i-tlb-sets = <1>;
+		// 	i-tlb-size = <32>;
+		// 	mmu-type = "riscv,sv39";
+		// 	next-level-cache = <&ccache>;
+		// 	reg = <1>;
+		// 	riscv,isa = "rv64imafdc";
+		// 	starfive,itim = <&itim1>;
+		// 	status = "okay";
+		// 	tlb-split;
+		// 	cpu1_intc: interrupt-controller {
+		// 		#interrupt-cells = <1>;
+		// 		compatible = "riscv,cpu-intc";
+		// 		interrupt-controller;
+		// 	};
+		// };
 	};
 
 	memory@80000000 {
