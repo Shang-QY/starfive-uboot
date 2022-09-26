@@ -34,6 +34,9 @@ static void efi_reserve_memory(u64 addr, u64 size, bool nomap)
 	else
 		type = EFI_BOOT_SERVICES_DATA;
 
+    printf("[efi_reserve_memory] Reserved memory mapping failed addr %llx size %llx, type: %d\n",
+			addr, size, type);
+
 	ret = efi_add_memory_map(addr, size, type);
 	if (ret != EFI_SUCCESS)
 		log_err("Reserved memory mapping failed addr %llx size %llx\n",
@@ -56,11 +59,13 @@ void efi_carve_out_dt_rsv(void *fdt)
 	int nodeoffset, subnode;
 
 	nr_rsv = fdt_num_mem_rsv(fdt);
+    printf("[efi_carve_out_dt_rsv] nr_rsv: %d\n", nr_rsv);
 
 	/* Look for an existing entry and add it to the efi mem map. */
 	for (i = 0; i < nr_rsv; i++) {
 		if (fdt_get_mem_rsv(fdt, i, &addr, &size) != 0)
 			continue;
+        printf("[efi_carve_out_dt_rsv] efi_reserve_memory: addr: %llx, size: %llx, nomap: %d\n", addr, size, true);
 		efi_reserve_memory(addr, size, true);
 	}
 
@@ -86,6 +91,7 @@ void efi_carve_out_dt_rsv(void *fdt)
 
 				nomap = !!fdt_getprop(fdt, subnode, "no-map",
 						      NULL);
+                printf("[efi_carve_out_dt_rsv] process reserved memory, efi_reserve_memory: addr: %llx, size: %llx, nomap: %d\n", fdt_addr, fdt_size, nomap);
 				efi_reserve_memory(fdt_addr, fdt_size, nomap);
 			}
 			subnode = fdt_next_subnode(fdt, subnode);

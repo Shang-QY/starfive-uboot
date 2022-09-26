@@ -57,6 +57,7 @@ int riscv_fdt_copy_resv_mem_node(const void *src, void *dst)
 
 	fdt_for_each_subnode(node, src, offset) {
 		name = fdt_get_name(src, node, NULL);
+        printf("[riscv_fdt_copy_resv_mem_node] name: %s\n", name);
 
 		addr = fdtdec_get_addr_size_auto_parent(src, offset, node,
 							"reg", 0, &size,
@@ -72,8 +73,10 @@ int riscv_fdt_copy_resv_mem_node(const void *src, void *dst)
 								       max_len);
 			*(basename + bname_len) = '\0';
 		}
+        printf("[riscv_fdt_copy_resv_mem_node] basename: %s\n", basename);
 		pmp_mem.start = addr;
 		pmp_mem.end = addr + size - 1;
+        printf("[riscv_fdt_copy_resv_mem_node] fdtdec_add_reserved_memory: addr: %llx, size: %llx", addr, size);
 		err = fdtdec_add_reserved_memory(dst, basename, &pmp_mem,
 						 NULL, 0, &phandle, 0);
 		if (err < 0 && err != -FDT_ERR_EXISTS) {
@@ -122,6 +125,7 @@ int riscv_board_reserved_mem_fixup(void *fdt)
 int board_fix_fdt(void *fdt)
 {
 	int err;
+    printf("[board_fix_fdt] Enter board_fix_fdt\n");
 
 	err = riscv_board_reserved_mem_fixup(fdt);
 	if (err < 0) {

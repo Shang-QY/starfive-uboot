@@ -237,6 +237,7 @@ int fdt_initrd(void *fdt, ulong initrd_start, ulong initrd_end)
 		}
 	}
 
+    printf("[fdt_initrd] fdt_add_mem_rsv(): addr: %lx, size: %lx\n", initrd_start, initrd_end - initrd_start);
 	err = fdt_add_mem_rsv(fdt, initrd_start, initrd_end - initrd_start);
 	if (err < 0) {
 		printf("fdt_initrd: %s\n", fdt_strerror(err));
@@ -687,6 +688,7 @@ int fdt_shrink_to_minimum(void *blob, uint extrasize)
 
 	if (fdt_memrsv) {
 		/* Add the new reservation */
+        printf("[fdt_shrink_to_minimum] fdt_add_mem_rsv(): addr: %llx, size: %x\n", map_to_sysmem(blob), actualsize);
 		ret = fdt_add_mem_rsv(blob, map_to_sysmem(blob), actualsize);
 		if (ret < 0)
 			return ret;

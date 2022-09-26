@@ -881,6 +881,7 @@ efi_status_t efi_add_runtime_mmio(void *mmio_ptr, u64 len)
 	struct efi_runtime_mmio_list *newmmio;
 	uint64_t addr = *(uintptr_t *)mmio_ptr;
 	efi_status_t ret;
+    printf("[efi_add_runtime_mmio] Enter efi_add_runtime_mmio, before efi_add_memory_map.\n");
 
 	ret = efi_add_memory_map(addr, len, EFI_MMAP_IO);
 	if (ret != EFI_SUCCESS)

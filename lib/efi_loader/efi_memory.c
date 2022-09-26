@@ -249,7 +249,7 @@ static efi_status_t efi_add_memory_map_pg(u64 start, u64 pages,
 	uint64_t carved_pages = 0;
 	struct efi_event *evt;
 
-	EFI_PRINT("%s: 0x%llx 0x%llx %d %s\n", __func__,
+	printf("%s: 0x%llx 0x%llx %d %s\n", __func__,
 		  start, pages, memory_type, overlap_only_ram ? "yes" : "no");
 
 	if (memory_type >= EFI_MAX_MEMORY_TYPE)
@@ -360,6 +360,7 @@ static efi_status_t efi_add_memory_map_pg(u64 start, u64 pages,
  */
 efi_status_t efi_add_memory_map(u64 start, u64 size, int memory_type)
 {
+    printf("[efi_add_memory_map] start: %llx, size: %llx, memory_type: %d\n", start, size, memory_type);
 	u64 pages;
 
 	pages = efi_size_in_pages(size + (start & EFI_PAGE_MASK));
@@ -745,6 +746,7 @@ efi_status_t efi_get_memory_map(efi_uintn_t *memory_map_size,
 efi_status_t efi_add_conventional_memory_map(u64 ram_start, u64 ram_end,
 					     u64 ram_top)
 {
+    printf("[efi_add_conventional_memory_map] ram_start: %llx, ram_end: %llx, ram_top: %llx\n", ram_start, ram_end, ram_top);
 	u64 pages;
 
 	/* Remove partial pages */
@@ -784,8 +786,10 @@ efi_status_t efi_add_conventional_memory_map(u64 ram_start, u64 ram_end,
 
 __weak void efi_add_known_memory(void)
 {
-	u64 ram_top = board_get_usable_ram_top(0) & ~EFI_PAGE_MASK;
-	int i;
+	printf("[efi_add_known_memory] Enter efi_add_known_memory\n");
+    u64 ram_top = board_get_usable_ram_top(0) & ~EFI_PAGE_MASK;
+	printf("[efi_add_known_memory] ram_top: %llx\n", ram_top);
+    int i;
 
 	/*
 	 * ram_top is just outside mapped memory. So use an offset of one for
@@ -811,6 +815,7 @@ __weak void efi_add_known_memory(void)
 /* Add memory regions for U-Boot's memory and for the runtime services code */
 static void add_u_boot_and_runtime(void)
 {
+    printf("[add_u_boot_and_runtime] Enter add_u_boot_and_runtime\n");
 	unsigned long runtime_start, runtime_end, runtime_pages;
 	unsigned long runtime_mask = EFI_PAGE_MASK;
 	unsigned long uboot_start, uboot_pages;
@@ -847,7 +852,8 @@ static void add_u_boot_and_runtime(void)
 
 int efi_memory_init(void)
 {
-	efi_add_known_memory();
+	printf("[efi_memory_init] enter memory init\n");
+    efi_add_known_memory();
 
 	add_u_boot_and_runtime();
 

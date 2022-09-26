@@ -7,7 +7,7 @@
 # object inclusion implicitly depends on it
 
 asflags-y += -DHOST_ARCH="$(HOST_ARCH)" -I.
-ccflags-y += -DHOST_ARCH="$(HOST_ARCH)"
+ccflags-y += -DHOST_ARCH="$(HOST_ARCH)" -DDEBUG
 
 CFLAGS_efi_boottime.o += \
   -DFW_VERSION="0x$(VERSION)" \

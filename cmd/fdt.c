@@ -593,6 +593,8 @@ static int do_fdt(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])
 			int err;
 			addr = simple_strtoull(argv[3], NULL, 16);
 			size = simple_strtoull(argv[4], NULL, 16);
+            printf("[do_fdt] libfdt fdt_add_mem_rsv(): addr: %llx, size: %llx\n",
+					addr, size);
 			err = fdt_add_mem_rsv(working_fdt, addr, size);
 
 			if (err < 0) {

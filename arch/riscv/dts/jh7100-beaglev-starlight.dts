@@ -21,54 +21,6 @@
 
 	chosen {
 		stdout-path = "serial0:115200n8";
-
-        opensbi-domains {
-            compatible = "opensbi,domain,config";
-
-            tmem1: tmem@1 {
-                compatible = "opensbi,domain,memregion";
-                base = <0x1 0x80000000>;
-                order = <31>;
-            };
-
-            tmem2: tmem@2 {
-                compatible = "opensbi,domain,memregion";
-                base = <0x2 0x0>;
-                order = <31>;
-            };
-
-            tuart: tuart {
-                compatible = "opensbi,domain,memregion";
-                base = <0x0 0x12440000>;
-                order = <16>;
-                mmio;
-                devices = <&uart3>;
-            };
-
-            allmem: allmem {
-                compatible = "opensbi,domain,memregion";
-                base = <0x0 0x0>;
-                order = <64>;
-            };
-
-            udomain: untrusted-domain {
-                compatible = "opensbi,domain,instance";
-                possible-harts = <&cpu0>;
-                regions = <&tmem1 0x0>, <&tmem2 0x0>, <&allmem 0x7>;
-                boot-hart = <&cpu0>;
-            };
-
-            tdomain: trusted-domain {
-                compatible = "opensbi,domain,instance";
-                possible-harts = <&cpu1>;
-                regions = <&tmem1 0x7>, <&tmem2 0x7>, <&tuart 0x7>;
-                boot-hart = <&cpu1>;
-                next-arg1 = <0x0 0x0>;
-                next-addr = <0x1 0x80100000>;
-                next-mode = <0x0>;
-                system-reset-allowed;
-            };
-        };
 	};
 
 	cpus {
@@ -78,7 +30,6 @@
 
 		cpu0: cpu@0 {
 			compatible = "sifive,u74-mc", "riscv";
-            opensbi-domain = <&udomain>;
 			d-cache-block-size = <64>;
 			d-cache-sets = <64>;
 			d-cache-size = <32768>;
@@ -106,7 +57,6 @@
 
 		cpu1: cpu@1 {
 			compatible = "sifive,u74-mc", "riscv";
-            opensbi-domain = <&tdomain>;
 			d-cache-block-size = <64>;
 			d-cache-sets = <64>;
 			d-cache-size = <32768>;
@@ -135,7 +85,7 @@
 
 	memory@80000000 {
 		device_type = "memory";
-		reg = <0x0 0x80000000 0x2 0x0>;
+		reg = <0x0 0x80000000 0x1 0x0>;
 	};
 
 	leds {
