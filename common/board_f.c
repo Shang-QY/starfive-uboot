@@ -55,6 +55,8 @@
 #include <dm/root.h>
 #include <linux/errno.h>
 
+#define DEBUG
+
 /*
  * Pointer to initial global data area
  *

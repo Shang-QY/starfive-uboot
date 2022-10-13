@@ -29,6 +29,8 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+#define DEBUG
+
 /*
  * Here are the type we know about. One day we might allow drivers to
  * register. For now we just put them here. The COMPAT macro allows us to

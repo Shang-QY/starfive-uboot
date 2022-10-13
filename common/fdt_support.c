@@ -20,6 +20,8 @@
 #include <exports.h>
 #include <fdtdec.h>
 
+#define DEBUG
+
 /**
  * fdt_getprop_u32_default_node - Return a node's property or a default
  *
