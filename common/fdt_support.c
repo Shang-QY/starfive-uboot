@@ -1106,6 +1106,7 @@ static u64 of_bus_default_map(fdt32_t *addr, const fdt32_t *range,
 	da = fdt_read_number(addr, na);
 
 	debug("OF: default map, cp=%llx, s=%llx, da=%llx\n", cp, s, da);
+    log_alert("[of_bus_default_map] test log_alert\n");
 
 	if (da < cp || da >= (cp + s))
 		return OF_BAD_ADDR;
@@ -1910,7 +1911,7 @@ int fdt_overlay_apply_verbose(void *fdt, void *fdto)
 {
 	int err;
 	bool has_symbols;
-
+    printf("[overlay_fixup3] shangqy\n");
 	err = fdt_path_offset(fdt, "/__symbols__");
 	has_symbols = err >= 0;
 

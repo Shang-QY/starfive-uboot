@@ -518,7 +518,8 @@ static int overlay_fixup_phandles(void *fdt, void *fdto)
 		return 0; /* nothing to do */
 	if (fixups_off < 0)
 		return fixups_off;
-
+    
+    printf("[overlay_fixup1] shangqy\n");
 	/* And base DTs without symbols */
 	symbols_off = fdt_path_offset(fdt, "/__symbols__");
 	if ((symbols_off < 0 && (symbols_off != -FDT_ERR_NOTFOUND)))
@@ -704,7 +705,7 @@ static int overlay_symbol_update(void *fdt, void *fdto)
 	const char *target_path;
 	char *buf;
 	void *p;
-
+    printf("[overlay_fixup2] shangqy\n");
 	ov_sym = fdt_subnode_offset(fdto, 0, "__symbols__");
 
 	/* if no overlay symbols exist no problem */

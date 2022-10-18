@@ -190,6 +190,8 @@ int _log_buffer(enum log_category_t cat, enum log_level_t level,
 #define log_io(_fmt...)		log(LOG_CATEGORY, LOGL_DEBUG_IO, ##_fmt)
 #define log_cont(_fmt...)	log(LOGC_CONT, LOGL_CONT, ##_fmt)
 
+#define LOG_DEBUG
+
 #ifdef LOG_DEBUG
 #define _LOG_DEBUG	LOGL_FORCE_DEBUG
 #else
@@ -241,6 +243,7 @@ int _log_buffer(enum log_category_t cat, enum log_level_t level,
 		      __func__, pr_fmt(_fmt), ##_args); \
 })
 
+#define DEBUG
 #ifdef DEBUG
 #define _DEBUG	1
 #else

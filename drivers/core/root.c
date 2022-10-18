@@ -7,6 +7,7 @@
  */
 
 #define LOG_CATEGORY UCLASS_ROOT
+#define DEBUG
 
 #include <common.h>
 #include <errno.h>
