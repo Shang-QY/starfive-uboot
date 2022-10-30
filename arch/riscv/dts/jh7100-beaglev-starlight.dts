@@ -25,16 +25,10 @@
         opensbi-domains {
             compatible = "opensbi,domain,config";
 
-            tmem1: tmem@1 {
+            tmem: tmem {
                 compatible = "opensbi,domain,memregion";
-                base = <0x1 0x80000000>;
-                order = <31>;
-            };
-
-            tmem2: tmem@2 {
-                compatible = "opensbi,domain,memregion";
-                base = <0x2 0x0>;
-                order = <31>;
+                base = <0x0 0x80080000>;
+                order = <16>;
             };
 
             tuart: tuart {
@@ -54,17 +48,17 @@
             udomain: untrusted-domain {
                 compatible = "opensbi,domain,instance";
                 possible-harts = <&cpu0>;
-                regions = <&allmem 0x7>;
+                regions = <&tmem 0x0>, <&allmem 0x7>;
                 boot-hart = <&cpu0>;
             };
 
             tdomain: trusted-domain {
                 compatible = "opensbi,domain,instance";
                 possible-harts = <&cpu1>;
-                regions = <&tmem1 0x7>, <&tmem2 0x7>, <&tuart 0x7>;
+                regions = <&tmem 0x7>, <&tuart 0x7>;
                 boot-hart = <&cpu1>;
                 next-arg1 = <0x0 0x0>;
-                next-addr = <0x1 0x80100000>;
+                next-addr = <0x0 0x80080000>;
                 next-mode = <0x0>;
                 system-reset-allowed;
             };
@@ -154,6 +148,10 @@
 		#address-cells = <2>;
 		#size-cells = <2>;
 		ranges;
+
+        payload_reserved: mmode_resv0@80080000 {
+            reg = <0x0 0x80080000 0x0 0x10000>;
+        };
 
 		linux,cma {
 			compatible = "shared-dma-pool";
