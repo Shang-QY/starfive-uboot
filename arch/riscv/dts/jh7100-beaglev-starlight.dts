@@ -50,6 +50,9 @@
                 possible-harts = <&cpu0>;
                 regions = <&tmem 0x0>, <&allmem 0x7>;
                 boot-hart = <&cpu0>;
+                next-arg1 = <0x0 0x82200000>;
+                next-addr = <0x0 0x80200000>;
+                next-mode = <0x1>;
             };
 
             tdomain: trusted-domain {
@@ -59,7 +62,7 @@
                 boot-hart = <&cpu1>;
                 next-arg1 = <0x0 0x0>;
                 next-addr = <0x0 0x80080000>;
-                next-mode = <0x0>;
+                next-mode = <0x1>;
                 system-reset-allowed;
             };
         };
