@@ -58,10 +58,10 @@
             tdomain: trusted-domain {
                 compatible = "opensbi,domain,instance";
                 possible-harts = <&cpu1>;
-                regions = <&tmem 0x7>, <&tuart 0x7>;
+                regions = <&allmem 0x7>;
                 boot-hart = <&cpu1>;
                 next-arg1 = <0x0 0x0>;
-                next-addr = <0x0 0x80080000>;
+                next-addr = <0x1 0x80000000>;
                 next-mode = <0x1>;
                 system-reset-allowed;
             };
