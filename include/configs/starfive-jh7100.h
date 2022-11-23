@@ -14,7 +14,7 @@
  * Miscellaneous configurable options
  */
 #define CONFIG_SYS_CBSIZE		1024	/* Console I/O Buffer Size */
-#define CONFIG_SYS_BOOTM_LEN		(64 << 20) /* 64MB */
+#define CONFIG_SYS_BOOTM_LEN		(128 << 20) /* 128MB */
 
 /*
  * Print Buffer Size

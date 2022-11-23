@@ -356,7 +356,7 @@ static int handle_decomp_error(int comp_type, size_t uncomp_size, int ret)
 	if (uncomp_size >= CONFIG_SYS_BOOTM_LEN)
 		printf("Image too large: increase CONFIG_SYS_BOOTM_LEN\n");
 	else
-		printf("%s: uncompress error %d\n", name, ret);
+		printf("%s: uncompress error sqy trace %d\n", name, ret);
 
 	/*
 	 * The decompression routines are now safe, so will not write beyond
