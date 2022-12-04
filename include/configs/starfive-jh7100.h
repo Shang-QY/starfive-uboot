@@ -139,4 +139,8 @@
 #define CONFIG_STARFIVE_EEPROM_ATOM1_VSTR_SIZE	32
 #endif
 
+/* Ethernet */
+#define CONFIG_IPADDR			192.168.21.18
+#define CONFIG_SERVERIP			192.168.29.47
+
 #endif /* __CONFIG_H */
