@@ -402,15 +402,15 @@ static int bootm_load_os(bootm_headers_t *images, int boot_progress)
 
 	flush_cache(flush_start, ALIGN(load_end, ARCH_DMA_MINALIGN) - flush_start);
 
-	debug("   kernel loaded at 0x%08lx, end = 0x%08lx\n", load, load_end);
+	printf("   kernel loaded at 0x%08lx, end = 0x%08lx\n", load, load_end);
 	bootstage_mark(BOOTSTAGE_ID_KERNEL_LOADED);
 
 	no_overlap = (os.comp == IH_COMP_NONE && load == image_start);
 
 	if (!no_overlap && load < blob_end && load_end > blob_start) {
-		debug("images.os.start = 0x%lX, images.os.end = 0x%lx\n",
+		printf("images.os.start = 0x%lX, images.os.end = 0x%lx\n",
 		      blob_start, blob_end);
-		debug("images.os.load = 0x%lx, load_end = 0x%lx\n", load,
+		printf("images.os.load = 0x%lx, load_end = 0x%lx\n", load,
 		      load_end);
 
 		/* Check what type of image this is. */
@@ -511,7 +511,7 @@ static int fixup_silent_linux(char *buf, int maxlen)
 	else if (want_silent == -1 && !(gd->flags & GD_FLG_SILENT))
 		return 0;
 
-	debug("before silent fix-up: %s\n", cmdline);
+	printf("before silent fix-up: %s\n", cmdline);
 	if (*cmdline) {
 		char *start = strstr(cmdline, CONSOLE_ARG);
 
@@ -539,7 +539,7 @@ static int fixup_silent_linux(char *buf, int maxlen)
 			return -ENOSPC;
 		strcpy(buf, CONSOLE_ARG);
 	}
-	debug("after silent fix-up: %s\n", buf);
+	printf("after silent fix-up: %s\n", buf);
 
 	return 0;
 }
@@ -664,6 +664,7 @@ int do_bootm_states(struct cmd_tbl *cmdtp, int flag, int argc,
 		    char *const argv[], int states, bootm_headers_t *images,
 		    int boot_progress)
 {
+    printf("[SQY] do_bootm_states, states: %d\n", states);
 	boot_os_fn *boot_fn;
 	ulong iflag = 0;
 	int ret = 0, need_boot_fn;
@@ -946,7 +947,7 @@ static const void *boot_get_kernel(struct cmd_tbl *cmdtp, int flag, int argc,
 		return NULL;
 	}
 
-	debug("   kernel data at 0x%08lx, len = 0x%08lx (%ld)\n",
+	printf("   kernel data at 0x%08lx, len = 0x%08lx (%ld)\n",
 	      *os_data, *os_len, *os_len);
 
 	return buf;

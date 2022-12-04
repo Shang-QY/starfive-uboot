@@ -81,7 +81,7 @@ static void boot_fdt_reserve_region(struct lmb *lmb, uint64_t addr,
 
 	ret = lmb_reserve_flags(lmb, addr, size, flags);
 	if (ret >= 0) {
-		debug("   reserving fdt memory region: addr=%llx size=%llx flags=%x\n",
+		printf("   reserving fdt memory region: addr=%llx size=%llx flags=%x\n",
 		      (unsigned long long)addr,
 		      (unsigned long long)size, flags);
 	} else {
@@ -226,7 +226,7 @@ int boot_relocate_fdt(struct lmb *lmb, char **of_flat_tree, ulong *of_size)
 		printf("   Using Device Tree in place at %p, end %p\n",
 		       of_start, of_start + of_len - 1);
 	} else {
-		debug("## device tree at %p ... %p (len=%ld [0x%lX])\n",
+		printf("## device tree at %p ... %p (len=%ld [0x%lX])\n",
 		      fdt_blob, fdt_blob + *of_size - 1, of_len, of_len);
 
 		printf("   Loading Device Tree to %p, end %p ... ",
@@ -290,17 +290,17 @@ static int select_fdt(bootm_headers_t *images, const char *select, u8 arch,
 
 			if (fit_parse_conf(select, default_addr, &fdt_addr,
 					   &fit_uname_config)) {
-				debug("*  fdt: config '%s' from image at 0x%08lx\n",
+				printf("*  fdt: config '%s' from image at 0x%08lx\n",
 				      fit_uname_config, fdt_addr);
 			} else if (fit_parse_subimage(select, default_addr, &fdt_addr,
 				   &fit_uname_fdt)) {
-				debug("*  fdt: subimage '%s' from image at 0x%08lx\n",
+				printf("*  fdt: subimage '%s' from image at 0x%08lx\n",
 				      fit_uname_fdt, fdt_addr);
 			} else
 #endif
 		{
 			fdt_addr = hextoul(select, NULL);
-			debug("*  fdt: cmdline image address = 0x%08lx\n",
+			printf("*  fdt: cmdline image address = 0x%08lx\n",
 			      fdt_addr);
 		}
 #if CONFIG_IS_ENABLED(FIT)
@@ -317,7 +317,7 @@ static int select_fdt(bootm_headers_t *images, const char *select, u8 arch,
 			return fdt_noffset;
 	}
 #endif
-	debug("## Checking for 'FDT'/'FDT Image' at %08lx\n",
+	printf("## Checking for 'FDT'/'FDT Image' at %08lx\n",
 	      fdt_addr);
 
 	/*
@@ -362,7 +362,7 @@ static int select_fdt(bootm_headers_t *images, const char *select, u8 arch,
 				return -EFAULT;
 			}
 
-			debug("   Loading FDT from 0x%08lx to 0x%08lx\n",
+			printf("   Loading FDT from 0x%08lx to 0x%08lx\n",
 			      image_data, load);
 
 			memmove((void *)load,
@@ -404,7 +404,7 @@ static int select_fdt(bootm_headers_t *images, const char *select, u8 arch,
 			/*
 			 * FDT blob
 			 */
-			debug("*  fdt: raw FDT blob\n");
+			printf("*  fdt: raw FDT blob\n");
 			printf("## Flattened Device Tree blob at %08lx\n",
 			       (long)fdt_addr);
 		}
@@ -495,7 +495,7 @@ int boot_get_fdt(int flag, int argc, char *const argv[], uint8_t arch,
 				goto error;
 			}
 		} else {
-			debug("## No Flattened Device Tree\n");
+			printf("## No Flattened Device Tree\n");
 			goto no_fdt;
 		}
 #ifdef CONFIG_ANDROID_BOOT_IMAGE
@@ -512,14 +512,14 @@ int boot_get_fdt(int flag, int argc, char *const argv[], uint8_t arch,
 			if (fdt_check_header(fdt_blob))
 				goto no_fdt;
 
-			debug("## Using FDT in Android image dtb area with idx %u\n", dtb_idx);
+			printf("## Using FDT in Android image dtb area with idx %u\n", dtb_idx);
 		} else if (!android_image_get_second(hdr, &fdt_data, &fdt_len) &&
 			!fdt_check_header((char *)fdt_data)) {
 			fdt_blob = (char *)fdt_data;
 			if (fdt_totalsize(fdt_blob) != fdt_len)
 				goto error;
 
-			debug("## Using FDT in Android image second area\n");
+			printf("## Using FDT in Android image second area\n");
 		} else {
 			fdt_addr = env_get_hex("fdtaddr", 0);
 			if (!fdt_addr)
@@ -529,23 +529,23 @@ int boot_get_fdt(int flag, int argc, char *const argv[], uint8_t arch,
 			if (fdt_check_header(fdt_blob))
 				goto no_fdt;
 
-			debug("## Using FDT at ${fdtaddr}=Ox%lx\n", fdt_addr);
+			printf("## Using FDT at ${fdtaddr}=Ox%lx\n", fdt_addr);
 		}
 #endif
 	} else {
-		debug("## No Flattened Device Tree\n");
+		printf("## No Flattened Device Tree\n");
 		goto no_fdt;
 	}
 
 	*of_flat_tree = fdt_blob;
 	*of_size = fdt_totalsize(fdt_blob);
-	debug("   of_flat_tree at 0x%08lx size 0x%08lx\n",
+	printf("   of_flat_tree at 0x%08lx size 0x%08lx\n",
 	      (ulong)*of_flat_tree, *of_size);
 
 	return 0;
 
 no_fdt:
-	debug("Continuing to boot without FDT\n");
+	printf("Continuing to boot without FDT\n");
 	return 0;
 error:
 	return 1;

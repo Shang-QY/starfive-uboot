@@ -40,11 +40,11 @@ static int booti_start(struct cmd_tbl *cmdtp, int flag, int argc,
 	/* Setup Linux kernel Image entry point */
 	if (!argc) {
 		ld = image_load_addr;
-		debug("*  kernel: default image load address = 0x%08lx\n",
+		printf("*  kernel: default image load address = 0x%08lx\n",
 				image_load_addr);
 	} else {
 		ld = hextoul(argv[0], NULL);
-		debug("*  kernel: cmdline image address = 0x%08lx\n", ld);
+		printf("*  kernel: cmdline image address = 0x%08lx\n", ld);
 	}
 
 	temp = map_sysmem(ld, 0);
@@ -61,7 +61,7 @@ static int booti_start(struct cmd_tbl *cmdtp, int flag, int argc,
 			return -EINVAL;
 		}
 
-		debug("kernel image compression type %d size = 0x%08lx address = 0x%08lx\n",
+		printf("kernel image compression type %d size = 0x%08lx address = 0x%08lx\n",
 			ctype, comp_len, (ulong)dest);
 		decomp_len = comp_len * 10;
 		ret = image_decomp(ctype, 0, ld, IH_TYPE_KERNEL,
@@ -98,38 +98,42 @@ static int booti_start(struct cmd_tbl *cmdtp, int flag, int argc,
 	if (bootm_find_images(flag, argc, argv, relocated_addr, image_size))
 		return 1;
 
+    printf("[SQY] after no bootm_find_images\n");
+
 	return 0;
 }
 
 int do_booti(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])
 {
 	int ret;
+    ulong ld;
 
 	/* Consume 'booti' */
 	argc--; argv++;
+    ld = hextoul(argv[0], NULL);
+	// if (booti_start(cmdtp, flag, argc, argv, &images))
+	// 	return 1;
 
-	if (booti_start(cmdtp, flag, argc, argv, &images))
-		return 1;
-
+    printf("[SQY] skip booti_start, jump in place! ld: %lx\n", ld);
+    printf("[SQY] do_booti: ep: %lx, os_start: %lx, os_end: %lx\n", images.ep, images.os.start, images.os.end);
+    sbi_ecall(0x100100, 89, ld, 0, 0, 0, 0, 0);
+    return 0;
 	/*
 	 * We are doing the BOOTM_STATE_LOADOS state ourselves, so must
 	 * disable interrupts ourselves
 	 */
-	bootm_disable_interrupts();
+// 	bootm_disable_interrupts();
 
-	images.os.os = IH_OS_LINUX;
-#ifdef CONFIG_RISCV_SMODE
-	images.os.arch = IH_ARCH_RISCV;
-#elif CONFIG_ARM64
-	images.os.arch = IH_ARCH_ARM64;
-#endif
-	ret = do_bootm_states(cmdtp, flag, argc, argv,
-#ifdef CONFIG_SYS_BOOT_RAMDISK_HIGH
-			      BOOTM_STATE_RAMDISK |
-#endif
-			      BOOTM_STATE_OS_PREP | BOOTM_STATE_OS_FAKE_GO |
-			      BOOTM_STATE_OS_GO,
-			      &images, 1);
+// 	images.os.os = IH_OS_LINUX;
+// #ifdef CONFIG_RISCV_SMODE
+// 	images.os.arch = IH_ARCH_RISCV;
+// #elif CONFIG_ARM64
+// 	images.os.arch = IH_ARCH_ARM64;
+// #endif
+// 	ret = do_bootm_states(cmdtp, flag, argc, argv,
+// 			      BOOTM_STATE_OS_PREP | BOOTM_STATE_OS_FAKE_GO |
+// 			      BOOTM_STATE_OS_GO,
+// 			      &images, 1);
 
 	return ret;
 }

@@ -593,6 +593,7 @@ __weak void board_preboot_os(void)
 int boot_selected_os(int argc, char *const argv[], int state,
 		     bootm_headers_t *images, boot_os_fn *boot_fn)
 {
+    printf("[SQY] boot_selected_os boot_fn\n");
 	arch_preboot_os();
 	board_preboot_os();
 	boot_fn(state, argc, argv, images);
@@ -603,7 +604,7 @@ int boot_selected_os(int argc, char *const argv[], int state,
 	    state == BOOTM_STATE_OS_FAKE_GO) /* We expect to return */
 		return 0;
 	bootstage_error(BOOTSTAGE_ID_BOOT_OS_RETURNED);
-	debug("\n## Control returned to monitor - resetting...\n");
+	printf("\n## Control returned to monitor - resetting...\n");
 
 	return BOOTM_ERR_RESET;
 }

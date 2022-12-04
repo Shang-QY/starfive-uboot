@@ -66,7 +66,7 @@ static void boot_prep_linux(bootm_headers_t *images)
 {
 	if (CONFIG_IS_ENABLED(OF_LIBFDT) && images->ft_len) {
 #ifdef CONFIG_OF_LIBFDT
-		debug("using: FDT\n");
+		printf("using: FDT\n");
 		if (image_setup_linux(images)) {
 			printf("FDT creation failed! hanging...");
 			hang();
@@ -90,7 +90,7 @@ static void boot_jump_linux(bootm_headers_t *images, int flag)
 
 	bootstage_mark(BOOTSTAGE_ID_RUN_OS);
 
-	debug("## Transferring control to kernel (at address %08lx) ...\n",
+	printf("## Transferring control to kernel (at address %08lx) ...\n",
 	      (ulong)kernel);
 
 	announce_and_cleanup(fake);
@@ -111,6 +111,7 @@ static void boot_jump_linux(bootm_headers_t *images, int flag)
 int do_bootm_linux(int flag, int argc, char *const argv[],
 		   bootm_headers_t *images)
 {
+	printf("[SQY] do_bootm_linux\n");
 	/* No need for those on RISC-V */
 	if (flag & BOOTM_STATE_OS_BD_T || flag & BOOTM_STATE_OS_CMDLINE)
 		return -1;
@@ -133,6 +134,7 @@ int do_bootm_linux(int flag, int argc, char *const argv[],
 int do_bootm_vxworks(int flag, int argc, char *const argv[],
 		     bootm_headers_t *images)
 {
+    printf("[SQY] do_bootm_vxworks\n");
 	return do_bootm_linux(flag, argc, argv, images);
 }
 
