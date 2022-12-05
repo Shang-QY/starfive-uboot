@@ -60,7 +60,7 @@
                 possible-harts = <&cpu1>;
                 regions = <&allmem 0x7>;
                 boot-hart = <&cpu1>;
-                next-arg1 = <0x1 0x82200000>;
+                next-arg1 = <0x1 0x86000000>;
                 next-addr = <0x1 0x80200000>;
                 next-mode = <0x1>;
                 system-reset-allowed;
