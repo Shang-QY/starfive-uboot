@@ -61,7 +61,7 @@
                 regions = <&allmem 0x7>;
                 boot-hart = <&cpu1>;
                 next-arg1 = <0x1 0x86000000>;
-                next-addr = <0x1 0x80200000>;
+                next-addr = <0x0 0xc0200000>;
                 next-mode = <0x1>;
                 system-reset-allowed;
             };
@@ -153,38 +153,8 @@
 		ranges;
 
         payload_reserved: mmode_resv0@80080000 {
-            reg = <0x0 0x80080000 0x0 0x10000>;
+            reg = <0x0 0xc0000000 0x1 0xc0000000>;
         };
-
-		linux,cma {
-			compatible = "shared-dma-pool";
-			reusable;
-			size = <0x0 0x28000000>;
-			alignment = <0x0 0x1000>;
-			alloc-ranges = <0x0 0xa0000000 0x0 0x28000000>;
-			linux,cma-default;
-		};
-
-		jpu_reserved: framebuffer@c9000000 {
-			reg = <0x0 0xc9000000 0x0 0x4000000>;
-		};
-
-		nvdla_reserved: framebuffer@d0000000 {
-			no-map;
-			reg = <0x0 0xd0000000 0x0 0x28000000>;
-		};
-
-		vin_reserved: framebuffer@f9000000 {
-			compatible = "shared-dma-pool";
-			no-map;
-			reg = <0x0 0xf9000000 0x0 0x1000000>;
-		};
-
-		sffb_reserved: framebuffer@fb000000 {
-			compatible = "shared-dma-pool";
-			no-map;
-			reg = <0x0 0xfb000000 0x0 0x2000000>;
-		};
 	};
 
 	wifi_pwrseq: wifi-pwrseq {
@@ -604,32 +574,6 @@
 	pinctrl-0 = <&i2c0_pins>;
 	status = "okay";
 
-	imx219@10 {
-		compatible = "imx219";
-		reg = <0x10>;
-		clocks = <&clk_ext_camera>;
-		clock-names = "xclk";
-		// powerdown-gpio = <&gpio 21 GPIO_ACTIVE_HIGH>;
-		// reset-gpio = <&gpio 58 GPIO_ACTIVE_HIGH>;
-		pinctrl-names = "default", "reset_low", "reset_high";
-		pinctrl-0 = <&sensor0_default>;
-		pinctrl-1 = <&sensor0_reset_low>;
-		pinctrl-2 = <&sensor0_reset_high>;
-		//DOVDD-supply = <&v2v8>;
-		rotation = <0>;
-
-		port {
-			/* CSI2 bus endpoint */
-			imx219_to_csi2rx0: endpoint {
-				remote-endpoint = <&csi2rx0_from_imx219>;
-				bus-type = <4>;      /* MIPI CSI-2 D-PHY */
-				clock-lanes = <0>;
-				data-lanes = <1 2>;
-				link-frequencies = /bits/ 64 <456000000>;
-			};
-		};
-	};
-
 	pmic@5e {
 		compatible = "ti,tps65086";
 		reg = <0x5e>;
@@ -637,17 +581,6 @@
 		#gpio-cells = <2>;
 
 		regulators {
-		};
-	};
-
-	tda998x@70 {
-		compatible = "nxp,tda998x";
-		reg = <0x70>;
-
-		port {
-			tda998x_0_input: endpoint {
-				remote-endpoint = <&hdmi_out>;
-			};
 		};
 	};
 };
@@ -677,51 +610,6 @@
 		compatible = "seeed_panel";
 		reg = <0x45>;
 	};
-
-	/* TODO: ov5640 and sc2235 used on EVB board, not support on starlight board, remove it here?*/
-	ov5640: ov5640@3c {
-		compatible = "ovti,ov5640";
-		reg = <0x3c>;
-		clocks = <&clk_ext_camera>;
-		clock-names = "xclk";
-		powerdown-gpios = <&gpio 27 GPIO_ACTIVE_HIGH>;
-		reset-gpios = <&gpio 28 GPIO_ACTIVE_HIGH>;
-		//DOVDD-supply = <&v2v8>;
-		rotation = <180>;
-		port {
-			// Parallel bus endpoint
-			ov5640_to_parallel: endpoint {
-				remote-endpoint = <&parallel_from_ov5640>;
-				bus-type = <5>;      // Parallel
-				bus-width = <8>;
-				data-shift = <2>; // lines 9:2 are used
-				hsync-active = <0>;
-				vsync-active = <1>;
-				pclk-sample = <1>;
-			};
-		};
-	};
-	sc2235@30 {
-		compatible = "sc2235";
-		reg = <0x30>;
-		clocks = <&clk_ext_camera>;
-		clock-names = "xclk";
-		powerdown-gpios = <&gpio 27 GPIO_ACTIVE_HIGH>;
-		reset-gpios = <&gpio 28 GPIO_ACTIVE_HIGH>;
-		//DOVDD-supply = <&v2v8>;
-		port {
-			// Parallel bus endpoint
-			sc2235_to_parallel: endpoint {
-				remote-endpoint = <&parallel_from_sc2235>;
-				bus-type = <5>;      // Parallel
-				bus-width = <8>;
-				data-shift = <2>; // lines 13:6 are used
-				hsync-active = <1>;
-				vsync-active = <1>;
-				pclk-sample = <1>;
-			};
-		};
-	};
 };
 
 &i2c2 {
@@ -740,32 +628,6 @@
 		port {
 			panel_dsi_port: endpoint {
 				remote-endpoint = <&dsi_out_port>;
-			};
-		};
-	};
-
-	imx219sub@10 {
-		compatible = "imx219";
-		reg = <0x10>;
-		clocks = <&clk_ext_camera>;
-		clock-names = "xclk";
-		// powerdown-gpio = <&gpio 21 GPIO_ACTIVE_HIGH>;
-		// reset-gpio = <&gpio 57 GPIO_ACTIVE_HIGH>;
-		pinctrl-names = "default", "reset_low", "reset_high";
-		pinctrl-0 = <&sensor1_default>;
-		pinctrl-1 = <&sensor1_reset_low>;
-		pinctrl-2 = <&sensor1_reset_high>;
-		//DOVDD-supply = <&v2v8>;
-		rotation = <0>;
-
-		port {
-			/* CSI2 bus endpoint */
-			imx219_to_csi2rx1: endpoint {
-				remote-endpoint = <&csi2rx1_from_imx219>;
-				bus-type = <4>;      /* MIPI CSI-2 D-PHY */
-				clock-lanes = <0>;
-				data-lanes = <1 2>;
-				link-frequencies = /bits/ 64 <456000000>;
 			};
 		};
 	};
@@ -843,238 +705,6 @@
 	wifi@1 {
 		compatible = "brcm,bcm4329-fmac";
 		reg = <1>;
-	};
-};
-
-&sfivefb {
-	status = "okay";
-
-	pp1 {
-		pp-id = <1>;
-		fifo-out;
-		src-format = <COLOR_YUV420_NV21>;
-		src-width = <1920>;
-		src-height = <1080>;
-		dst-format = <COLOR_RGB888_ARGB>;
-		dst-width = <1920>;
-		dst-height = <1080>;
-	};
-
-	tda_998x_1080p {
-		compatible = "starfive,display-dev";
-		panel_name = "tda_998x_1080p";
-		panel_lcd_id = <22>;  /* 1080p */
-		interface_info = "rgb_interface";
-		refresh_en = <1>;
-		bits-per-pixel = <16>;
-		physical-width = <62>;
-		physical-height = <114>;
-		panel-width = <1920>;
-		panel-height = <1080>;
-		pixel-clock = <78000000>;
-		/*dyn_fps;*/		/*dynamic frame rate support*/
-
-		/*.flags = PREFER_CMD_SEND_MONOLITHIC | CE_CMD_SEND_MONOLITHIC | RESUME_WITH_PREFER | RESUME_WITH_CE*/
-		/*gamma-command-monolithic;*/
-		/*ce-command-monolithic;*/
-		/*resume-with-gamma;*/
-		/*resume-with-ce;*/
-
-		/*mipi info*/
-		mipi-byte-clock = <78000>;
-		mipi-escape-clock = <13000>;
-		lane-no = <4>;
-		display_mode = "video_mode";		/*video_mode, command_mode*/
-
-		/*
-		auto_stop_clklane_en;
-		im_pin_val;*/
-
-		color_bits = <COLOR_CODE_24BIT>;
-		/*is_18bit_loosely;*/
-
-		/*video mode info*/
-		h-pulse-width = <44>;
-		h-back-porch = <148>;
-		h-front-porch = <88>;
-		v-pulse-width = <5>;
-		v-back-porch = <36>;
-		v-front-porch = <4>;
-		status = "okay";
-		sync_pol = "vsync_high_act";		/*vsync_high_act, hsync_high_act*/
-		lp_cmd_en;
-		/*lp_hfp_en;*/
-		/*lp_hbp_en;*/
-		/*lp_vact_en;*/
-		lp_vfp_en;
-		lp_vbp_en;
-		lp_vsa_en;
-		traffic-mode = "burst_with_sync_pulses";	/*non_burst_with_sync_pulses, non_burst_with_sync_events*/
-
-		/*phy info*/
-		data_tprepare = /bits/ 8 <0>;
-		data_hs_zero = /bits/ 8 <0>;
-		data_hs_exit = /bits/ 8 <0>;
-		data_hs_trail = /bits/ 8 <0>;
-
-		/*te info*/
-		te_source = "external_pin";			/*external_pin, dsi_te_trigger*/
-		te_trigger_mode = "rising_edge";		/*rising_edge, high_1000us*/
-		te_enable = <0>;
-		cm_te_effect_sync_enable = <0>;			/*used in command mode*/
-		te_count_per_sec = <64>;				/*used in esd*/
-
-		/*ext info*/
-		/*
-		crc_rx_en;
-		ecc_rx_en;
-		eotp_rx_en;
-		*/
-		eotp_tx_en;
-
-		dev_read_time = <0x7fff>;
-		/*type cmd return_count return_code*/
-		/*id_read_cmd_info = [];*/
-		/*pre_id_cmd = [];*/
-		/*esd_read_cmd_info = [DCS_CMD 0A 01 9C];*/
-		/*pre_esd_cmd = [];*/
-		/*panel-on-command = [];*/
-		/*panel-off-command = [];*/
-		/*reset-sequence = <1 5>, <0 10>, <1 30>;*/
-		/*
-		panel-gamma-warm-command = [
-
-		];
-		panel-gamma-nature-command = [
-
-		];
-		panel-gamma-cool-command = [
-
-		];
-
-		panel-ce-std-command = [
-
-		];
-		panel-ce-vivid-command = [
-
-		];
-		*/
-	};
-
-	seeed_5_inch {
-		compatible = "starfive,display-dev";
-		panel_name = "seeed_5_inch";
-		panel_lcd_id = <22>;  /* 480p */
-		interface_info = "mipi_interface";
-		refresh_en = <1>;
-		bits-per-pixel = <24>;
-		physical-width = <62>;
-		physical-height = <114>;
-		panel-width = <800>;
-		panel-height = <480>;
-		pixel-clock = <27500000>;
-		/*dyn_fps;*/		/*dynamic frame rate support*/
-		fps = <50>;
-		/*.flags = PREFER_CMD_SEND_MONOLITHIC | CE_CMD_SEND_MONOLITHIC | RESUME_WITH_PREFER | RESUME_WITH_CE*/
-		/*gamma-command-monolithic;*/
-		/*ce-command-monolithic;*/
-		/*resume-with-gamma;*/
-		/*resume-with-ce;*/
-
-		/*mipi info*/
-		mipi-byte-clock = <78000>;
-		mipi-escape-clock = <13000>;
-		lane-no = <1>;
-		display_mode = "video_mode";		/*video_mode, command_mode*/
-
-		/*
-		auto_stop_clklane_en;
-		im_pin_val;
-		*/
-
-		color_bits = <COLOR_CODE_24BIT>;
-		/*is_18bit_loosely;*/
-
-		/*video mode info*/
-		h-pulse-width = <10>;
-		h-back-porch = <20>;
-		h-front-porch = <50>;
-		v-pulse-width = <5>;
-		v-back-porch = <5>;
-		v-front-porch = <135>;
-
-		/*seeed panel mode info*/
-		dphy_bps   = <700000000>;
-		dsi_burst_mode = <0>;
-		dsi_sync_pulse = <1>;
-		// bytes
-		dsi_hsa   = <30>;
-		dsi_hbp   = <211>;
-		dsi_hfp   = <159>;
-		// lines
-		dsi_vsa   = <5>;
-		dsi_vbp   = <5>;
-		dsi_vfp   = <134>;
-
-		status = "okay";
-		sync_pol = "vsync_high_act";		/*vsync_high_act, hsync_high_act*/
-		lp_cmd_en;
-		/*lp_hfp_en;*/
-		/*lp_hbp_en;*/
-		/*lp_vact_en;*/
-		lp_vfp_en;
-		lp_vbp_en;
-		lp_vsa_en;
-		traffic-mode = "burst_with_sync_pulses";	/*non_burst_with_sync_pulses, non_burst_with_sync_events*/
-
-		/*phy info*/
-		data_tprepare = /bits/ 8 <0>;
-		data_hs_zero = /bits/ 8 <0>;
-		data_hs_exit = /bits/ 8 <0>;
-		data_hs_trail = /bits/ 8 <0>;
-
-		/*te info*/
-		te_source = "external_pin";			/*external_pin, dsi_te_trigger*/
-		te_trigger_mode = "rising_edge";		/*rising_edge, high_1000us*/
-		te_enable = <0>;
-		cm_te_effect_sync_enable = <0>;			/*used in command mode*/
-		te_count_per_sec = <64>;				/*used in esd*/
-
-		/*ext info*/
-		/*
-		crc_rx_en;
-		ecc_rx_en;
-		eotp_rx_en;
-		*/
-		eotp_tx_en;
-
-		dev_read_time = <0x7fff>;
-		/*type cmd return_count return_code*/
-		/*id_read_cmd_info = [];*/
-		/*pre_id_cmd = [];*/
-		/*esd_read_cmd_info = [DCS_CMD 0A 01 9C];*/
-		/*pre_esd_cmd = [];*/
-		/*panel-on-command = [];*/
-		/*panel-off-command = [];*/
-		/*reset-sequence = <1 5>, <0 10>, <1 30>;*/
-		/*
-		panel-gamma-warm-command = [
-
-		];
-		panel-gamma-nature-command = [
-
-		];
-		panel-gamma-cool-command = [
-
-		];
-
-		panel-ce-std-command = [
-
-		];
-		panel-ce-vivid-command = [
-
-		];
-		*/
 	};
 };
 
