@@ -25,10 +25,22 @@
         opensbi-domains {
             compatible = "opensbi,domain,config";
 
-            tmem: tmem {
+            tmem1: tmem1 {
                 compatible = "opensbi,domain,memregion";
-                base = <0x0 0x80080000>;
-                order = <16>;
+                base = <0x0 0xc0000000>;
+                order = <30>;   // 1G
+            };
+
+            tmem2: tmem2 {
+                compatible = "opensbi,domain,memregion";
+                base = <0x1 0x00000000>;
+                order = <32>;   // 4G
+            };
+
+            tmem3: tmem3 {
+                compatible = "opensbi,domain,memregion";
+                base = <0x2 0x00000000>;
+                order = <31>;   // 2G
             };
 
             tuart: tuart {
@@ -47,12 +59,13 @@
 
             udomain: untrusted-domain {
                 compatible = "opensbi,domain,instance";
-                possible-harts = <&cpu0>;
-                regions = <&tmem 0x0>, <&allmem 0x7>;
+                possible-harts = <&cpu0>, <&cpu1>;
+                regions = <&tmem1 0x0>, <&tmem2 0x0>, <&tmem3 0x0>, <&allmem 0x7>;
                 boot-hart = <&cpu0>;
                 next-arg1 = <0x0 0x82200000>;
                 next-addr = <0x0 0x80200000>;
                 next-mode = <0x1>;
+                system-manager;
             };
 
             tdomain: trusted-domain {
@@ -103,7 +116,7 @@
 
 		cpu1: cpu@1 {
 			compatible = "sifive,u74-mc", "riscv";
-            opensbi-domain = <&tdomain>;
+            opensbi-domain = <&udomain>;
 			d-cache-block-size = <64>;
 			d-cache-sets = <64>;
 			d-cache-size = <32768>;
