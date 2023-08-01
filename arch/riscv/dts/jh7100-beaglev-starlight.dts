@@ -43,12 +43,22 @@
                 order = <31>;   // 2G
             };
 
+            // uart used by secure linux
             tuart: tuart {
                 compatible = "opensbi,domain,memregion";
                 base = <0x0 0x12440000>;
                 order = <16>;
                 mmio;
                 devices = <&uart3>;
+            };
+
+            // ethernet used by secure linux
+            teth: teth {
+                compatible = "opensbi,domain,memregion";
+                base = <0x0 0x10020000>;
+                order = <16>;
+                mmio;
+                devices = <&gmac>;
             };
 
             allmem: allmem {
@@ -60,7 +70,7 @@
             udomain: untrusted-domain {
                 compatible = "opensbi,domain,instance";
                 possible-harts = <&cpu0>;
-                regions = <&tmem1 0x0>, <&tmem2 0x0>, <&tmem3 0x0>, <&allmem 0x7>;
+                regions = <&tmem1 0x0>, <&tmem2 0x0>, <&tmem3 0x0>, <&tuart 0x0>, <&teth 0x0>, <&allmem 0x7>;
                 boot-hart = <&cpu0>;
                 next-arg1 = <0x0 0x82200000>;
                 next-addr = <0x0 0x80200000>;
